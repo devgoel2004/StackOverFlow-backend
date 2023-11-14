@@ -14,11 +14,11 @@ const userSchema = mongoose.Schema({
   },
   about: {
     type: String,
-    required: true,
+    // required: true,
   },
   tags: {
-    type: String,
-    required: true,
+    type: [String],
+    // required: true,
   },
   joinedOn: {
     type: Date,
