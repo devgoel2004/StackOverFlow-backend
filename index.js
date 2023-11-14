@@ -21,7 +21,7 @@ app.use("/user", userRoutes);
 app.use("/question", questionRoutes);
 app.use("/answer", answerRoutes);
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 //connect mongoDB databae
 const connection_url = process.env.CONNECTION_URL;
 
