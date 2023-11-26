@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
 import Questions from "../models/questionsModel.js";
+import users from "../models/authModel.js";
+const pts = 2;
 export const AskQuestion = async (req, res) => {
   const postQuestionData = req.body;
-  const postQuestion = new Questions(postQuestionData);
+  const userId = req.userId;
+  const postQuestion = new Questions({ ...postQuestionData, userId });
   try {
     await postQuestion.save();
     res.status(200).json("Posted a question successfully");
@@ -14,7 +17,7 @@ export const AskQuestion = async (req, res) => {
 
 export const getAllQuestions = async (req, res) => {
   try {
-    const questionList = await Questions.find();
+    const questionList = await Questions.find().sort({ askedOn: -1 });
     res.status(200).json(questionList);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -37,19 +40,18 @@ export const deleteQuestion = async (req, res) => {
 export const voteQuestion = async (req, res) => {
   const { id: _id } = req.params;
   const { value, userId } = req.body;
-
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     return res.status(404).send("question unavailable...");
   }
   try {
     const question = await Questions.findById(_id);
-    const upIndex = question.upVote.findIndex((id) => id === String(userId));
+    const upIndex = question.upVote.findIndex((_id) => _id === String(userId));
     const downIndex = question.downVote.findIndex(
       (id) => id === String(userId)
     );
     if (value === "upVote") {
       if (downIndex !== -1) {
-        question.downVote = question.downVotes.filter(
+        question.downVote = question.downVote.filter(
           (id) => id !== String(userId)
         );
       }
@@ -70,9 +72,14 @@ export const voteQuestion = async (req, res) => {
         );
       }
     }
+    const user = await users.findById(userId);
+    let score = (question.upVote.length - question.downVote.length) * pts;
+    user.score1 = Math.max(score, 0);
+    user.score = user.score1 + user.score2;
+    await user.save();
     await Questions.findByIdAndUpdate(_id, question);
-    res.status(200).json({ message: "voted successfull..." });
+    res.status(200).json({ message: "voted successfully..." });
   } catch (error) {
-    res.status(404).json({ message: "Id not found" });
+    res.status(404).json({ message: "id not found" });
   }
 };

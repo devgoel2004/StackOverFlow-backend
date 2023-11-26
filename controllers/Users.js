@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import users from "../models/authModel.js";
 
 export const getAllUsers = async (req, res) => {
@@ -11,10 +11,12 @@ export const getAllUsers = async (req, res) => {
         name: user.name,
         about: user.about,
         tags: user.tags,
+        score: user.score,
+        badge: user.badge,
         joinedOn: user.joinedOn,
       });
     });
-    res.status(200).json({ allUsersDetails });
+    res.status(200).json(allUsersDetails);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
