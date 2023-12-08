@@ -21,8 +21,6 @@ app.use(cors());
 app.use("/user", userRoutes);
 app.use("/question", questionRoutes);
 app.use("/answer", answerRoutes);
-app.use("/chatbot", chatbotRoutes);
-app.use("/otp", otpRoutes);
 //------- Deployment---------------------------------
 
 const __dirname1 = path.resolve();

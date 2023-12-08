@@ -1,4 +1,6 @@
 import express from "express";
+import fs from "fs";
+import multer from "multer";
 import {
   AskQuestion,
   getAllQuestions,
@@ -6,8 +8,38 @@ import {
   voteQuestion,
 } from "../controllers/Questions.js";
 import auth from "../middleware/auth.js";
+import path from "path";
 const router = express.Router();
-router.post("/Ask", auth, AskQuestion);
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    if (!fs.existsSync("public")) {
+      fs.mkdirSync("public");
+    }
+    if (!fs.existsSync("public/videos")) {
+      fs.mkdirSync("public/videos");
+    }
+    cb(null, "public/videos");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    var ext = path.extname(file.originalname);
+    if (ext !== ".mkv" && ext !== "mp4") {
+      return cb(new Error("Only videos are allowed"));
+    }
+    cb(null, true);
+  },
+});
+router.post(
+  "/Ask",
+  auth,
+  upload.fields([{ name: "videos", maxCount: 5 }]),
+  AskQuestion
+);
 router.get("/get", getAllQuestions);
 router.delete("/delete/:id", auth, deleteQuestion);
 router.patch("/vote/:id", voteQuestion);
