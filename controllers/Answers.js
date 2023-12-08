@@ -50,7 +50,6 @@ const updateNoQuestions = async (_id, noOfAnswers) => {
     });
   } catch (error) {
     console.log(error);
-    // res.status(200)
   }
 };
 export const deleteAnswer = async (req, res) => {
