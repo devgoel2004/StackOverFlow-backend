@@ -65,7 +65,7 @@ const sendOTP = async ({ email, subject, message, duration = 1 }) => {
 
     //clear any old record
     await OTP.deleteOne({ email });
-    const generateOTP = await generateOTP();
+    const generatedOTP = await generateOTP();
     //send mail
     const mailOptions = {
       from: AUTH_EMAIL,
@@ -73,14 +73,14 @@ const sendOTP = async ({ email, subject, message, duration = 1 }) => {
       subject,
       html: `<p>${message}</p>
       <p style="color:tomato; font-size:25px; letter-spacing:2px;">
-      <b>${generateOTP}</b>
+      <b>${generatedOTP}</b>
       </p>
       <p>
       This code <b> expires in ${duration} hour(s)</b></p>`,
     };
     await sendEmail(mailOptions);
     //save otp record
-    const hashedOTP = await hashedData(generateOTP);
+    const hashedOTP = await hashedData(generatedOTP);
     const newOTP = await new OTP({
       email,
       otp: hashedOTP,
