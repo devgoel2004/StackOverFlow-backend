@@ -4,9 +4,6 @@ import cors from "cors";
 import userRoutes from "./routes/users.js";
 import questionRoutes from "./routes/Questions.js";
 import answerRoutes from "./routes/Answers.js";
-import chatbotRoutes from "./routes/Chatbot.js";
-import otpRoutes from "./routes/Otp.js";
-
 import dotenv from "dotenv";
 import path from "path";
 const app = express();
