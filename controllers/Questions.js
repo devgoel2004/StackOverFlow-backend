@@ -5,15 +5,8 @@ const pts = 2;
 export const AskQuestion = async (req, res) => {
   const postQuestionData = req.body;
   const userId = req.userId;
-  let videosPath = [];
-  if (Array.isArray(req.files.videos) && req.files.videos.length > 0) {
-    for (let video of req.files.videos) {
-      videosPath.push("/" + video.path);
-    }
-  }
   const postQuestion = new Questions({
     ...postQuestionData,
-    videos: videosPath,
     userId,
   });
   try {
