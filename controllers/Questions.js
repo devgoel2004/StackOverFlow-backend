@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import Questions from "../models/questionsModel.js";
 import users from "../models/authModel.js";
 const pts = 2;
+
+//Post Question Controller
 export const AskQuestion = async (req, res) => {
   const postQuestionData = req.body;
   const userId = req.userId;
@@ -18,6 +20,7 @@ export const AskQuestion = async (req, res) => {
   }
 };
 
+//Get All Questions Controllers
 export const getAllQuestions = async (req, res) => {
   try {
     const questionList = await Questions.find().sort({ askedOn: -1 });
@@ -27,6 +30,7 @@ export const getAllQuestions = async (req, res) => {
   }
 };
 
+//Delete Question Controllers
 export const deleteQuestion = async (req, res) => {
   const { id: _id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -40,6 +44,7 @@ export const deleteQuestion = async (req, res) => {
   }
 };
 
+//Vote Question Controllers
 export const voteQuestion = async (req, res) => {
   const { id: _id } = req.params;
   const { value, userId } = req.body;

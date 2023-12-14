@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Questions from "../models/questionsModel.js";
 import users from "../models/authModel.js";
+
+//Post Answer
 export const postAnswer = async (req, res) => {
   const { id: _id } = req.params;
   const { noOfAnswers, answerBody, userAnswered, userId } = req.body;
@@ -39,7 +41,7 @@ export const postAnswer = async (req, res) => {
     await user.save();
     res.status(200).json(updatedQuestion);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(400).json("Error While Updating");
   }
 };
 
@@ -64,11 +66,11 @@ export const deleteAnswer = async (req, res) => {
   updateNoQuestions(_id, noOfAnswers);
   try {
     await Questions.updateOne(
+      { _id },
       {
-        id,
-      },
-      {
-        $pull: { answer: { _id: answerId } },
+        $pull: {
+          answer: { _id: answerId },
+        },
       }
     );
     res.status(200).json({ message: "successfully deleted the answer" });

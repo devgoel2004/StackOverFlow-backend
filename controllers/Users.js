@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import users from "../models/authModel.js";
 
+//Get All Users controllers
 export const getAllUsers = async (req, res) => {
   try {
     const allUsers = await users.find();
@@ -21,6 +22,8 @@ export const getAllUsers = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+//Update profile controller
 export const updateProfile = async (req, res) => {
   const { id: _id } = req.params;
   const { name, about, tags } = req.body;

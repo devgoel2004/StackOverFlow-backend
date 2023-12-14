@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import users from "../models/authModel.js";
+
+//Signup Controller
 export const signup = async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -26,6 +28,7 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: "Signup failed", error: err.message });
   }
 };
+
 //login controller
 export const login = async (req, res) => {
   const { email, password } = req.body;
